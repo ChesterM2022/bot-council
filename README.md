@@ -141,7 +141,8 @@ can consume more tokens than the visible answer.
 
 - `two-model-council/SKILL.md` — portable skill entry point;
 - `two-model-council/references/protocol.md` — turn and decision schemas;
-- `two-model-council/scripts/run_peer.py` — restricted peer runner;
-- `POST-DRAFT.md` — a public write-up based on the first real use.
+- `two-model-council/scripts/run_peer.py` — restricted peer runner.
 
-No license has been selected. Add one before distributing if appropriate.
+## License
+
+MIT. See `LICENSE`.
