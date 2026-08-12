@@ -65,6 +65,10 @@ runtimes share a trusted workspace and the requester authorizes named sources, u
 permits only read/search access. Do not stage copies. Repeat `--source-file` only
 as a fallback for runtimes without shared filesystem access.
 
+The runner also isolates the peer from the orchestrator's local configuration, so
+it does not inherit the operator's project instructions, memory, MCP servers, or
+skills. A peer carrying the orchestrator's context is not an independent voice.
+
 Never use permission-bypass flags. If the peer cannot run, record the failure and
 continue as a one-model analysis; do not simulate the missing voice.
 

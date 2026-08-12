@@ -97,6 +97,13 @@ def run_claude(
         "json",
         "--max-turns",
         "6",
+        # Isolate the peer from the orchestrator's machine. Without these the peer
+        # inherits the operator's CLAUDE.md, memory, MCP servers, and skills, which
+        # both contaminates its independence and can overflow the context window.
+        "--setting-sources",
+        "",
+        "--strict-mcp-config",
+        "--disable-slash-commands",
     ]
     if model:
         command.extend(["--model", model])
@@ -113,9 +120,19 @@ def run_claude(
         check=False,
         timeout=timeout_seconds,
     )
-    if completed.returncode != 0:
-        raise RuntimeError(completed.stderr.strip() or "Claude exited without an error message")
-    payload = json.loads(completed.stdout)
+    # The Claude CLI reports failures as JSON on stdout and leaves stderr empty, so
+    # read the diagnosis out of the payload before falling back to stderr.
+    try:
+        payload = json.loads(completed.stdout)
+    except json.JSONDecodeError:
+        payload = None
+    if completed.returncode != 0 or (isinstance(payload, dict) and payload.get("is_error")):
+        detail = payload.get("result") if isinstance(payload, dict) else None
+        if not isinstance(detail, str) or not detail.strip():
+            detail = completed.stderr.strip()
+        raise RuntimeError(detail or "Claude exited without an error message")
+    if not isinstance(payload, dict):
+        raise RuntimeError("Claude returned output that is not valid JSON")
     result = payload.get("result")
     if not isinstance(result, str) or not result.strip():
         raise RuntimeError("Claude returned no visible result")
