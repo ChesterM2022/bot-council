@@ -78,11 +78,47 @@ Each issue should preserve:
 model had been asked to inspect the problem and produce an execution-ready plan.
 The other files explain how that plan was reached.
 
-## Install as a Codex skill
+## Install
 
-Copy `two-model-council/` into your Codex skills directory. Keep the folder name
-and `SKILL.md` name unchanged. Install and authenticate the CLIs for the providers
-you select. Gemini support is built in; additional CLIs use a vetted adapter.
+`two-model-council/` is the skill folder. Keep the folder name and the `SKILL.md`
+name unchanged wherever you install it.
+
+The skill orchestrates the council; the peers are separate CLIs. Install and
+authenticate the CLIs for the providers you select. Claude, Codex, and Gemini are
+built in; additional CLIs use a vetted adapter.
+
+### Claude Code
+
+Copy the folder into personal skills, or into a single project:
+
+```bash
+# available in every project
+cp -R two-model-council ~/.claude/skills/
+```
+
+```bash
+# scoped to one project
+mkdir -p .claude/skills && cp -R two-model-council .claude/skills/
+```
+
+Invoke it with `/two-model-council`.
+
+### Gemini CLI
+
+`gemini skills` installs straight from this repository:
+
+```bash
+gemini skills install https://github.com/ChesterM2022/bot-council --path two-model-council
+```
+
+Add `--scope workspace` to limit it to the current project. To develop against a
+local checkout instead, `gemini skills link ./two-model-council` keeps edits live.
+Confirm with `gemini skills list`, and remove with
+`gemini skills uninstall two-model-council`. Verified on Gemini CLI 0.47.0.
+
+### Codex
+
+Copy `two-model-council/` into your Codex skills directory.
 
 ## Example
 
